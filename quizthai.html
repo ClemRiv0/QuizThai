@@ -1,0 +1,1497 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Quiz Consonnes Thaïes</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;700&family=Cinzel+Decorative:wght@700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#0a0a12;
+  --surface:#12121e;
+  --card:#1a1a2e;
+  --border:#2a2a4a;
+
+  --accent:#c9a227;
+
+  --high:#4cc9f0;
+  --mid:#f8961e;
+  --low:#7bc67e;
+
+  --text:#e8e8f0;
+  --muted:#6b6b8a;
+
+  --correct:#7bc67e;
+  --wrong:#e63946;
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'IBM Plex Mono', monospace;
+
+  min-height:100vh;
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+
+  padding:20px 16px 60px;
+
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(201,162,39,.04) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(76,201,240,.04) 0%, transparent 60%);
+}
+
+header{
+  text-align:center;
+  margin-bottom:28px;
+  padding-top:12px;
+}
+
+header h1{
+  font-family:'Cinzel Decorative', serif;
+  font-size:clamp(16px,4vw,26px);
+  color:var(--accent);
+  letter-spacing:2px;
+  margin-bottom:5px;
+}
+
+header p{
+  color:var(--muted);
+  font-size:12px;
+  letter-spacing:1px;
+}
+
+.screen{
+  width:100%;
+  max-width:680px;
+  display:none;
+}
+
+.screen.active{
+  display:block;
+}
+
+/* ───────────── SELECTION ───────────── */
+
+.sel-section{
+  margin-bottom:26px;
+}
+
+.sel-title{
+  font-size:10px;
+  letter-spacing:3px;
+  color:var(--muted);
+  text-transform:uppercase;
+  margin-bottom:12px;
+  padding-left:2px;
+}
+
+.class-filter-row{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-bottom:10px;
+}
+
+.cf-btn{
+  padding:14px 8px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  cursor:pointer;
+  transition:.2s;
+  text-align:center;
+  font-family:'IBM Plex Mono', monospace;
+}
+
+.cf-btn .cf-icon{
+  font-family:'Sarabun', sans-serif;
+  font-size:22px;
+  display:block;
+  margin-bottom:4px;
+}
+
+.cf-btn .cf-name{
+  font-size:10px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  display:block;
+}
+
+.cf-btn .cf-count{
+  font-size:11px;
+  color:var(--muted);
+  margin-top:3px;
+  display:block;
+}
+
+.cf-btn.haute{
+  color:var(--high);
+}
+
+.cf-btn.haute:hover{
+  background:rgba(76,201,240,.12);
+  border-color:var(--high);
+}
+
+.cf-btn.moyenne{
+  color:var(--mid);
+}
+
+.cf-btn.moyenne:hover{
+  background:rgba(248,150,30,.12);
+  border-color:var(--mid);
+}
+
+.cf-btn.basse{
+  color:var(--low);
+}
+
+.cf-btn.basse:hover{
+  background:rgba(123,198,126,.12);
+  border-color:var(--low);
+}
+
+.cf-btn.all-cls{
+  color:var(--accent);
+}
+
+.cf-btn.all-cls:hover{
+  background:rgba(201,162,39,.12);
+  border-color:var(--accent);
+}
+
+.all-row{
+  display:grid;
+}
+
+.consonant-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(54px,1fr));
+  gap:8px;
+}
+
+.cg-item{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:10px;
+
+  padding:8px 4px 6px;
+
+  text-align:center;
+  cursor:pointer;
+  transition:.15s;
+  position:relative;
+
+  user-select:none;
+}
+
+.cg-item .cg-thai{
+  font-family:'Sarabun', sans-serif;
+  font-size:26px;
+  display:block;
+  line-height:1.1;
+}
+
+.cg-item .cg-rom{
+  font-size:9px;
+  color:var(--muted);
+  letter-spacing:1px;
+  margin-top:2px;
+  display:block;
+}
+
+.cg-item:hover{
+  transform:translateY(-2px);
+}
+
+.cg-item.haute.selected,
+.cg-item.haute:hover{
+  background:rgba(76,201,240,.12);
+  border-color:var(--high);
+}
+
+.cg-item.haute.selected .cg-thai{
+  color:var(--high);
+}
+
+.cg-item.moyenne.selected,
+.cg-item.moyenne:hover{
+  background:rgba(248,150,30,.12);
+  border-color:var(--mid);
+}
+
+.cg-item.moyenne.selected .cg-thai{
+  color:var(--mid);
+}
+
+.cg-item.basse.selected,
+.cg-item.basse:hover{
+  background:rgba(123,198,126,.12);
+  border-color:var(--low);
+}
+
+.cg-item.basse.selected .cg-thai{
+  color:var(--low);
+}
+
+.cg-check{
+  position:absolute;
+  top:3px;
+  right:4px;
+  font-size:9px;
+  opacity:0;
+  transition:.15s;
+}
+
+.cg-item.selected .cg-check{
+  opacity:1;
+}
+
+.sel-actions{
+  display:flex;
+  gap:8px;
+  margin-top:12px;
+  flex-wrap:wrap;
+}
+
+.sel-action-btn{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:11px;
+  letter-spacing:1px;
+
+  padding:6px 12px;
+
+  border-radius:6px;
+  border:1px solid var(--border);
+
+  background:var(--surface);
+  color:var(--muted);
+
+  cursor:pointer;
+  transition:.15s;
+}
+
+.sel-action-btn:hover{
+  color:var(--text);
+  border-color:var(--muted);
+}
+
+.start-bar{
+  position:sticky;
+  bottom:0;
+
+  background:linear-gradient(to top,var(--bg) 70%,transparent);
+
+  padding:16px 0 4px;
+  margin-top:16px;
+}
+
+.start-btn{
+  width:100%;
+  padding:15px;
+
+  background:var(--accent);
+  color:#0a0a12;
+
+  border:none;
+  border-radius:12px;
+
+  font-family:'IBM Plex Mono', monospace;
+  font-size:14px;
+  font-weight:600;
+  letter-spacing:2px;
+
+  cursor:pointer;
+  transition:.2s;
+
+  text-transform:uppercase;
+}
+
+.start-btn:hover{
+  background:#e0b830;
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(201,162,39,.25);
+}
+
+.start-btn:disabled{
+  background:var(--border);
+  color:var(--muted);
+  cursor:not-allowed;
+  transform:none;
+  box-shadow:none;
+}
+
+.start-label{
+  text-align:center;
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:8px;
+}
+
+/* ───────────── QUIZ ───────────── */
+
+.progress-bar-wrap{
+  width:100%;
+  max-width:680px;
+  margin-bottom:10px;
+}
+
+.progress-meta{
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:6px;
+}
+
+.progress-track{
+  width:100%;
+  height:3px;
+  background:var(--border);
+  border-radius:2px;
+  overflow:hidden;
+}
+
+.progress-fill{
+  height:100%;
+  background:linear-gradient(90deg,var(--accent),var(--high));
+  transition:.4s ease;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+
+  padding:36px 32px;
+
+  width:100%;
+  max-width:680px;
+
+  position:relative;
+  overflow:hidden;
+}
+
+.card::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:2px;
+
+  background:linear-gradient(
+    90deg,
+    transparent,
+    var(--accent),
+    transparent
+  );
+}
+
+.consonant-display{
+  text-align:center;
+  margin-bottom:28px;
+}
+
+.thai-char{
+  font-family:'Sarabun', sans-serif;
+  font-size:clamp(72px,18vw,120px);
+
+  color:var(--text);
+
+  line-height:1;
+  display:block;
+
+  text-shadow:0 0 60px rgba(201,162,39,.2);
+}
+
+.section-label{
+  font-size:11px;
+  letter-spacing:2px;
+  color:var(--muted);
+  text-transform:uppercase;
+  margin-bottom:10px;
+}
+
+.romanization-input{
+  width:100%;
+
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:10px;
+
+  padding:14px 18px;
+
+  font-family:'IBM Plex Mono', monospace;
+  font-size:20px;
+  color:var(--text);
+
+  outline:none;
+
+  transition:.2s;
+
+  margin-bottom:24px;
+
+  text-align:center;
+  letter-spacing:2px;
+}
+
+.romanization-input:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(201,162,39,.1);
+}
+
+.romanization-input.correct{
+  border-color:var(--correct);
+  background:rgba(123,198,126,.05);
+}
+
+.romanization-input.wrong{
+  border-color:var(--wrong);
+  background:rgba(230,57,70,.05);
+}
+
+.class-section{
+  margin-bottom:28px;
+}
+
+.class-buttons{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+
+.class-btn{
+  padding:12px 8px;
+
+  border-radius:10px;
+  border:1px solid var(--border);
+
+  background:var(--surface);
+
+  color:var(--muted);
+
+  font-family:'IBM Plex Mono', monospace;
+  font-size:13px;
+
+  cursor:pointer;
+  transition:.2s;
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+}
+
+.class-btn .class-label{
+  font-size:10px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+
+.class-btn .class-example{
+  font-family:'Sarabun', sans-serif;
+  font-size:18px;
+}
+
+.class-btn.haute{
+  color:var(--high);
+}
+
+.class-btn.moyenne{
+  color:var(--mid);
+}
+
+.class-btn.basse{
+  color:var(--low);
+}
+
+.class-btn.selected{
+  border-color:currentColor;
+}
+
+.class-btn.haute.selected{
+  background:rgba(76,201,240,.1);
+}
+
+.class-btn.moyenne.selected{
+  background:rgba(248,150,30,.1);
+}
+
+.class-btn.basse.selected{
+  background:rgba(123,198,126,.1);
+}
+
+.submit-btn{
+  width:100%;
+  padding:14px;
+
+  background:var(--accent);
+  color:#0a0a12;
+
+  border:none;
+  border-radius:10px;
+
+  font-family:'IBM Plex Mono', monospace;
+  font-size:14px;
+  font-weight:600;
+  letter-spacing:2px;
+
+  cursor:pointer;
+  transition:.2s;
+
+  text-transform:uppercase;
+}
+
+.submit-btn:hover{
+  background:#e0b830;
+}
+
+.feedback{
+  text-align:center;
+  margin-top:16px;
+  font-size:13px;
+  min-height:20px;
+}
+
+.feedback.correct{
+  color:var(--correct);
+}
+
+.feedback.wrong{
+  color:var(--wrong);
+}
+
+.hint-text{
+  font-size:11px;
+  color:var(--muted);
+  text-align:center;
+  margin-top:8px;
+  letter-spacing:1px;
+}
+
+.back-link{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+
+  font-size:11px;
+  color:var(--muted);
+
+  letter-spacing:1px;
+  cursor:pointer;
+
+  margin-bottom:16px;
+
+  background:none;
+  border:none;
+
+  font-family:'IBM Plex Mono', monospace;
+}
+
+.mode-badge{
+  display:inline-block;
+
+  font-size:10px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+
+  padding:3px 10px;
+  border-radius:20px;
+
+  margin-bottom:6px;
+}
+
+.mode-badge.haute{
+  background:rgba(76,201,240,.12);
+  color:var(--high);
+}
+
+.mode-badge.moyenne{
+  background:rgba(248,150,30,.12);
+  color:var(--mid);
+}
+
+.mode-badge.basse{
+  background:rgba(123,198,126,.12);
+  color:var(--low);
+}
+
+.mode-badge.all{
+  background:rgba(201,162,39,.12);
+  color:var(--accent);
+}
+
+.mode-badge.custom{
+  background:rgba(201,162,39,.12);
+  color:var(--accent);
+}
+
+/* ───────────── SCORE ───────────── */
+
+.score-big{
+  font-family:'Cinzel Decorative', serif;
+  font-size:clamp(48px,15vw,80px);
+  color:var(--accent);
+
+  margin:16px 0 6px;
+  text-align:center;
+}
+
+.score-sub{
+  color:var(--muted);
+  font-size:13px;
+  margin-bottom:24px;
+  text-align:center;
+}
+
+.score-breakdown{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+
+.score-stat{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:10px;
+
+  padding:16px 8px;
+  text-align:center;
+}
+
+.score-stat .val{
+  font-size:24px;
+  font-weight:600;
+}
+
+.score-stat .lbl{
+  font-size:10px;
+  color:var(--muted);
+  text-transform:uppercase;
+}
+
+.score-btns{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:20px;
+}
+
+.menu-btn,
+.restart-btn{
+  padding:13px;
+  border-radius:10px;
+  cursor:pointer;
+
+  font-family:'IBM Plex Mono', monospace;
+  text-transform:uppercase;
+}
+
+.menu-btn{
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--text);
+}
+
+.restart-btn{
+  border:1px solid var(--accent);
+  background:transparent;
+  color:var(--accent);
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>พยัญชนะ THAI</h1>
+  <p>Quiz · Consonnes · Romanisation & Classe</p>
+</header>
+
+<!-- ───────────── MENU ───────────── -->
+
+<div class="screen active" id="screen-select">
+
+  <div class="sel-section">
+
+    <div class="sel-title">
+      Entraîner par classe tonale
+    </div>
+
+    <div class="class-filter-row">
+
+      <button class="cf-btn haute" onclick="filterByClass('haute')">
+        <span class="cf-icon">ข ฉ ห</span>
+        <span class="cf-name">Classe Haute</span>
+        <span class="cf-count" id="count-haute"></span>
+      </button>
+
+      <button class="cf-btn moyenne" onclick="filterByClass('moyenne')">
+        <span class="cf-icon">ก จ ด</span>
+        <span class="cf-name">Classe Moyenne</span>
+        <span class="cf-count" id="count-moyenne"></span>
+      </button>
+
+      <button class="cf-btn basse" onclick="filterByClass('basse')">
+        <span class="cf-icon">ง น ม</span>
+        <span class="cf-name">Classe Basse</span>
+        <span class="cf-count" id="count-basse"></span>
+      </button>
+
+    </div>
+
+    <div class="all-row">
+
+      <button class="cf-btn all-cls" onclick="filterByClass('all')">
+        <span class="cf-icon">ก ข ค ง จ ฉ ช ซ</span>
+        <span class="cf-name">Toutes les consonnes</span>
+        <span class="cf-count" id="count-all"></span>
+      </button>
+
+    </div>
+
+  </div>
+
+  <div class="sel-section">
+
+    <div class="sel-title">
+      Sélection individuelle
+    </div>
+
+    <div class="consonant-grid" id="consonant-grid"></div>
+
+    <div class="sel-actions">
+      <button class="sel-action-btn" onclick="selectAll()">Tout sélectionner</button>
+      <button class="sel-action-btn" onclick="deselectAll()">Tout désélectionner</button>
+      <button class="sel-action-btn" onclick="invertSelection()">Inverser</button>
+    </div>
+
+  </div>
+
+  <div class="start-bar">
+
+    <div class="start-label" id="start-label">
+      Aucune consonne sélectionnée
+    </div>
+
+    <button
+      class="start-btn"
+      id="start-btn"
+      disabled
+      onclick="startQuiz()"
+    >
+      Commencer le quiz →
+    </button>
+
+  </div>
+
+</div>
+
+<!-- ───────────── QUIZ ───────────── -->
+
+<div class="screen" id="screen-quiz">
+
+  <button class="back-link" onclick="goToMenu()">
+    ← Menu
+  </button>
+
+  <div class="progress-bar-wrap">
+
+    <div class="progress-meta">
+      <span id="progress-text"></span>
+      <span id="score-text"></span>
+    </div>
+
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+
+  </div>
+
+  <div class="card">
+
+    <div id="card-content">
+
+      <div class="consonant-display">
+
+        <div id="mode-badge-display"></div>
+
+        <span class="thai-char" id="thai-char"></span>
+
+      </div>
+
+      <div class="section-label">
+        Romanisation
+      </div>
+
+      <input
+        type="text"
+        class="romanization-input"
+        id="romanization-input"
+        placeholder="ex: k, kh, ng, ch..."
+        autocomplete="off"
+        spellcheck="false"
+      >
+
+      <div class="class-section" id="class-section-wrap">
+
+        <div class="section-label">
+          Classe de la consonne
+        </div>
+
+        <div class="class-buttons">
+
+          <button
+            class="class-btn haute"
+            data-class="haute"
+            onclick="selectClass('haute')"
+          >
+            <span class="class-label">Haute</span>
+            <span class="class-example">ข ฉ ห</span>
+          </button>
+
+          <button
+            class="class-btn moyenne"
+            data-class="moyenne"
+            onclick="selectClass('moyenne')"
+          >
+            <span class="class-label">Moyenne</span>
+            <span class="class-example">ก จ ด</span>
+          </button>
+
+          <button
+            class="class-btn basse"
+            data-class="basse"
+            onclick="selectClass('basse')"
+          >
+            <span class="class-label">Basse</span>
+            <span class="class-example">ง น ม</span>
+          </button>
+
+        </div>
+
+      </div>
+
+      <button
+        class="submit-btn"
+        id="submit-btn"
+        onclick="submitAnswer()"
+      >
+        Valider →
+      </button>
+
+      <div class="feedback" id="feedback"></div>
+
+      <div class="hint-text">
+        Entrée pour valider · 1/2/3 pour la classe
+      </div>
+
+    </div>
+
+    <div id="score-screen" style="display:none">
+
+      <div style="font-size:48px;text-align:center">
+        🏆
+      </div>
+
+      <div class="score-big" id="final-score"></div>
+
+      <div class="score-sub" id="final-sub"></div>
+
+      <div class="score-breakdown">
+
+        <div class="score-stat">
+          <span class="val" id="stat-correct"></span>
+          <span class="lbl">Corrects</span>
+        </div>
+
+        <div class="score-stat">
+          <span class="val" id="stat-wrong"></span>
+          <span class="lbl">Erreurs</span>
+        </div>
+
+        <div class="score-stat">
+          <span class="val" id="stat-pct"></span>
+          <span class="lbl">Réussite</span>
+        </div>
+
+      </div>
+
+      <div class="score-btns">
+
+        <button class="menu-btn" onclick="goToMenu()">
+          ← Menu
+        </button>
+
+        <button class="restart-btn" onclick="restartSameQuiz()">
+          ↺ Rejouer
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+const consonants = [
+
+  { thai:'ก', rom:['k'], cls:'moyenne' },
+
+  { thai:'ข', rom:['kh'], cls:'haute' },
+  { thai:'ฃ', rom:['kh'], cls:'haute' },
+
+  { thai:'ค', rom:['kh'], cls:'basse' },
+  { thai:'ฅ', rom:['kh'], cls:'basse' },
+  { thai:'ฆ', rom:['kh'], cls:'basse' },
+
+  { thai:'ง', rom:['ng'], cls:'basse' },
+
+  { thai:'จ', rom:['ch'], cls:'moyenne' },
+
+  { thai:'ฉ', rom:['ch'], cls:'haute' },
+  { thai:'ช', rom:['ch'], cls:'basse' },
+  { thai:'ฌ', rom:['ch'], cls:'basse' },
+
+  { thai:'ซ', rom:['s'], cls:'basse' },
+
+  { thai:'ญ', rom:['y'], cls:'basse' },
+
+  { thai:'ฎ', rom:['d'], cls:'moyenne' },
+  { thai:'ฏ', rom:['t'], cls:'moyenne' },
+
+  { thai:'ฐ', rom:['th'], cls:'haute' },
+  { thai:'ฑ', rom:['th'], cls:'basse' },
+  { thai:'ฒ', rom:['th'], cls:'basse' },
+
+  { thai:'ณ', rom:['n'], cls:'basse' },
+
+  { thai:'ด', rom:['d'], cls:'moyenne' },
+
+  { thai:'ต', rom:['t'], cls:'moyenne' },
+
+  { thai:'ถ', rom:['th'], cls:'haute' },
+  { thai:'ท', rom:['th'], cls:'basse' },
+  { thai:'ธ', rom:['th'], cls:'basse' },
+
+  { thai:'น', rom:['n'], cls:'basse' },
+
+  { thai:'บ', rom:['b'], cls:'moyenne' },
+
+  { thai:'ป', rom:['p'], cls:'moyenne' },
+
+  { thai:'ผ', rom:['ph'], cls:'haute' },
+  { thai:'ฝ', rom:['f'], cls:'haute' },
+
+  { thai:'พ', rom:['ph'], cls:'basse' },
+  { thai:'ฟ', rom:['f'], cls:'basse' },
+  { thai:'ภ', rom:['ph'], cls:'basse' },
+
+  { thai:'ม', rom:['m'], cls:'basse' },
+
+  { thai:'ย', rom:['y'], cls:'basse' },
+
+  { thai:'ร', rom:['r'], cls:'basse' },
+
+  { thai:'ล', rom:['l'], cls:'basse' },
+
+  { thai:'ว', rom:['w'], cls:'basse' },
+
+  { thai:'ศ', rom:['s'], cls:'haute' },
+  { thai:'ษ', rom:['s'], cls:'haute' },
+  { thai:'ส', rom:['s'], cls:'haute' },
+
+  { thai:'ห', rom:['h'], cls:'haute' },
+
+  { thai:'ฬ', rom:['l'], cls:'basse' },
+
+  { thai:'อ', rom:['silent'], cls:'moyenne' },
+
+  { thai:'ฮ', rom:['h'], cls:'basse' }
+
+];
+
+let selectedIndices = new Set();
+
+let currentMode = null;
+
+let queue = [];
+
+let currentIndex = 0;
+
+let score = 0;
+
+let selectedClass = null;
+
+let answered = false;
+
+let quizClassFilter = null;
+
+function initGrid(){
+
+  const grid = document.getElementById('consonant-grid');
+
+  grid.innerHTML = '';
+
+  const counts = {
+    haute:0,
+    moyenne:0,
+    basse:0
+  };
+
+  consonants.forEach((c,i)=>{
+
+    counts[c.cls]++;
+
+    const el = document.createElement('div');
+
+    el.className = `cg-item ${c.cls}`;
+
+    el.innerHTML = `
+      <span class="cg-thai">${c.thai}</span>
+      <span class="cg-rom">${c.rom[0]}</span>
+      <span class="cg-check">✓</span>
+    `;
+
+    el.onclick = ()=>toggleConsonant(i,el);
+
+    grid.appendChild(el);
+
+  });
+
+  document.getElementById('count-haute').textContent =
+    counts.haute + ' consonnes';
+
+  document.getElementById('count-moyenne').textContent =
+    counts.moyenne + ' consonnes';
+
+  document.getElementById('count-basse').textContent =
+    counts.basse + ' consonnes';
+
+  document.getElementById('count-all').textContent =
+    consonants.length + ' consonnes';
+}
+
+function toggleConsonant(i,el){
+
+  if(selectedIndices.has(i)){
+    selectedIndices.delete(i);
+    el.classList.remove('selected');
+  }
+  else{
+    selectedIndices.add(i);
+    el.classList.add('selected');
+  }
+
+  currentMode = 'custom';
+
+  updateStartBar();
+}
+
+function filterByClass(cls){
+
+  selectedIndices.clear();
+
+  consonants.forEach((c,i)=>{
+    if(cls === 'all' || c.cls === cls){
+      selectedIndices.add(i);
+    }
+  });
+
+  document.querySelectorAll('.cg-item')
+    .forEach((el,i)=>{
+      el.classList.toggle(
+        'selected',
+        selectedIndices.has(i)
+      );
+    });
+
+  currentMode = cls;
+
+  updateStartBar();
+}
+
+function selectAll(){
+  filterByClass('all');
+}
+
+function deselectAll(){
+
+  selectedIndices.clear();
+
+  document.querySelectorAll('.cg-item')
+    .forEach(el=>el.classList.remove('selected'));
+
+  currentMode = 'custom';
+
+  updateStartBar();
+}
+
+function invertSelection(){
+
+  consonants.forEach((_,i)=>{
+    if(selectedIndices.has(i)){
+      selectedIndices.delete(i);
+    }
+    else{
+      selectedIndices.add(i);
+    }
+  });
+
+  document.querySelectorAll('.cg-item')
+    .forEach((el,i)=>{
+      el.classList.toggle(
+        'selected',
+        selectedIndices.has(i)
+      );
+    });
+
+  currentMode = 'custom';
+
+  updateStartBar();
+}
+
+function updateStartBar(){
+
+  const n = selectedIndices.size;
+
+  const btn = document.getElementById('start-btn');
+
+  btn.disabled = n === 0;
+
+  document.getElementById('start-label').textContent =
+    n === 0
+      ? 'Aucune consonne sélectionnée'
+      : `${n} consonnes sélectionnées`;
+}
+
+function shuffle(arr){
+
+  const a = [...arr];
+
+  for(let i=a.length-1;i>0;i--){
+
+    const j = Math.floor(Math.random()*(i+1));
+
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+
+  return a;
+}
+
+function startQuiz(){
+
+  queue = shuffle(
+    [...selectedIndices].map(i=>consonants[i])
+  );
+
+  currentIndex = 0;
+  score = 0;
+  answered = false;
+
+  quizClassFilter =
+    (
+      currentMode === 'haute' ||
+      currentMode === 'moyenne' ||
+      currentMode === 'basse'
+    )
+    ? currentMode
+    : null;
+
+  document.getElementById('class-section-wrap').style.display =
+    quizClassFilter ? 'none' : 'block';
+
+  document.getElementById('mode-badge-display').innerHTML =
+    `<div class="mode-badge ${currentMode}">
+      ${currentMode}
+    </div>`;
+
+  showScreen('screen-quiz');
+
+  document.getElementById('card-content').style.display = 'block';
+  document.getElementById('score-screen').style.display = 'none';
+
+  loadQuestion();
+
+  updateProgress();
+}
+
+function loadQuestion(){
+
+  answered = false;
+
+  selectedClass = quizClassFilter || null;
+
+  const c = queue[currentIndex];
+
+  document.getElementById('thai-char').textContent =
+    c.thai;
+
+  const input = document.getElementById('romanization-input');
+
+  input.value = '';
+
+  input.disabled = false;
+
+  input.className = 'romanization-input';
+
+  document.getElementById('feedback').textContent = '';
+
+  document.querySelectorAll('.class-btn')
+    .forEach(btn=>btn.classList.remove('selected'));
+
+  input.focus();
+}
+
+function selectClass(cls){
+
+  if(answered || quizClassFilter) return;
+
+  selectedClass = cls;
+
+  document.querySelectorAll('.class-btn')
+    .forEach(btn=>{
+
+      btn.classList.toggle(
+        'selected',
+        btn.dataset.class === cls
+      );
+
+    });
+}
+
+function submitAnswer(){
+
+  if(answered){
+    nextQuestion();
+    return;
+  }
+
+  const c = queue[currentIndex];
+
+  const input =
+    document.getElementById('romanization-input');
+
+  const userRom =
+    input.value.trim().toLowerCase();
+
+  if(!userRom){
+    showFeedback('Entre une romanisation','wrong');
+    return;
+  }
+
+  if(!selectedClass){
+    showFeedback('Choisis une classe','wrong');
+    return;
+  }
+
+  answered = true;
+
+  input.disabled = true;
+
+  const romCorrect =
+    c.rom.includes(userRom);
+
+  const classCorrect =
+    quizClassFilter
+      ? true
+      : selectedClass === c.cls;
+
+  if(romCorrect && classCorrect){
+
+    score++;
+
+    input.classList.add('correct');
+
+    showFeedback('✓ Correct','correct');
+  }
+  else{
+
+    input.classList.add('wrong');
+
+    showFeedback(
+      `✗ ${c.rom[0]} · ${c.cls}`,
+      'wrong'
+    );
+  }
+
+  document.getElementById('submit-btn').textContent =
+    'Suivant →';
+
+  updateProgress();
+}
+
+function nextQuestion(){
+
+  currentIndex++;
+
+  if(currentIndex >= queue.length){
+    showScore();
+  }
+  else{
+
+    document.getElementById('submit-btn').textContent =
+      'Valider →';
+
+    loadQuestion();
+
+    updateProgress();
+  }
+}
+
+function updateProgress(){
+
+  const total = queue.length;
+
+  const progress =
+    (
+      (answered ? currentIndex + 1 : currentIndex)
+      / total
+    ) * 100;
+
+  document.getElementById('progress-fill').style.width =
+    progress + '%';
+
+  document.getElementById('progress-text').textContent =
+    `${Math.min(currentIndex+1,total)} / ${total}`;
+
+  document.getElementById('score-text').textContent =
+    `Score : ${score}`;
+}
+
+function showFeedback(msg,cls){
+
+  const el = document.getElementById('feedback');
+
+  el.textContent = msg;
+
+  el.className = `feedback ${cls}`;
+}
+
+function showScore(){
+
+  document.getElementById('card-content').style.display =
+    'none';
+
+  document.getElementById('score-screen').style.display =
+    'block';
+
+  const total = queue.length;
+
+  const pct =
+    Math.round(score / total * 100);
+
+  document.getElementById('final-score').textContent =
+    `${score}/${total}`;
+
+  document.getElementById('stat-correct').textContent =
+    score;
+
+  document.getElementById('stat-wrong').textContent =
+    total - score;
+
+  document.getElementById('stat-pct').textContent =
+    pct + '%';
+
+  document.getElementById('final-sub').textContent =
+    pct === 100
+      ? 'Parfait 🎉'
+      : pct >= 80
+      ? 'Excellent 🌟'
+      : pct >= 60
+      ? 'Bien joué'
+      : 'Continue à pratiquer';
+}
+
+function restartSameQuiz(){
+
+  currentIndex = 0;
+
+  score = 0;
+
+  queue = shuffle(queue);
+
+  document.getElementById('card-content').style.display =
+    'block';
+
+  document.getElementById('score-screen').style.display =
+    'none';
+
+  document.getElementById('submit-btn').textContent =
+    'Valider →';
+
+  loadQuestion();
+
+  updateProgress();
+}
+
+function goToMenu(){
+
+  showScreen('screen-select');
+}
+
+function showScreen(id){
+
+  document.querySelectorAll('.screen')
+    .forEach(s=>s.classList.remove('active'));
+
+  document.getElementById(id)
+    .classList.add('active');
+
+  window.scrollTo(0,0);
+}
+
+document.addEventListener('keydown',(e)=>{
+
+  if(
+    !document.getElementById('screen-quiz')
+      .classList.contains('active')
+  ) return;
+
+  if(e.key === 'Enter'){
+
+    if(answered){
+      nextQuestion();
+    }
+    else{
+      submitAnswer();
+    }
+  }
+
+  if(!quizClassFilter){
+
+    if(e.key === '1'){
+      selectClass('haute');
+    }
+
+    if(e.key === '2'){
+      selectClass('moyenne');
+    }
+
+    if(e.key === '3'){
+      selectClass('basse');
+    }
+  }
+});
+
+initGrid();
+
+updateStartBar();
+</script>
+
+</body>
+</html>
