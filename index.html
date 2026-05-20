@@ -3,60 +3,53 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Quiz Consonnes Thaïes</title>
-
+<title>Quiz Thaï · Consonnes & Voyelles</title>
+ 
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;700&family=Cinzel+Decorative:wght@700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
-
+ 
 <style>
 :root{
   --bg:#0a0a12;
   --surface:#12121e;
   --card:#1a1a2e;
   --border:#2a2a4a;
-
   --accent:#c9a227;
-
   --high:#4cc9f0;
   --mid:#f8961e;
   --low:#7bc67e;
-
+  --vowel:#b87fff;
+  --vowel-short:#ff7eb6;
+  --vowel-long:#7eb8ff;
+  --vowel-special:#7fffd4;
   --text:#e8e8f0;
   --muted:#6b6b8a;
-
   --correct:#7bc67e;
   --wrong:#e63946;
 }
-
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-}
-
+ 
+*{ box-sizing:border-box; margin:0; padding:0; }
+ 
 body{
   background:var(--bg);
   color:var(--text);
   font-family:'IBM Plex Mono', monospace;
-
   min-height:100vh;
-
   display:flex;
   flex-direction:column;
   align-items:center;
-
   padding:20px 16px 60px;
-
   background-image:
     radial-gradient(ellipse at 20% 50%, rgba(201,162,39,.04) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 20%, rgba(76,201,240,.04) 0%, transparent 60%);
+    radial-gradient(ellipse at 80% 20%, rgba(76,201,240,.04) 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 80%, rgba(184,127,255,.04) 0%, transparent 60%);
 }
-
+ 
 header{
   text-align:center;
-  margin-bottom:28px;
+  margin-bottom:24px;
   padding-top:12px;
 }
-
+ 
 header h1{
   font-family:'Cinzel Decorative', serif;
   font-size:clamp(16px,4vw,26px);
@@ -64,29 +57,57 @@ header h1{
   letter-spacing:2px;
   margin-bottom:5px;
 }
-
+ 
 header p{
   color:var(--muted);
   font-size:12px;
   letter-spacing:1px;
 }
-
-.screen{
+ 
+/* ── TAB NAV ── */
+.tab-nav{
+  display:flex;
+  gap:0;
+  margin-bottom:24px;
   width:100%;
   max-width:680px;
-  display:none;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:4px;
 }
-
-.screen.active{
-  display:block;
+ 
+.tab-btn{
+  flex:1;
+  padding:10px 8px;
+  border:none;
+  background:transparent;
+  color:var(--muted);
+  font-family:'IBM Plex Mono', monospace;
+  font-size:11px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  cursor:pointer;
+  border-radius:9px;
+  transition:.2s;
 }
-
-/* ───────────── SELECTION ───────────── */
-
-.sel-section{
-  margin-bottom:26px;
+ 
+.tab-btn.active{
+  background:var(--card);
+  color:var(--accent);
+  border:1px solid var(--border);
 }
-
+ 
+.tab-btn:hover:not(.active){
+  color:var(--text);
+}
+ 
+.screen{ width:100%; max-width:680px; display:none; }
+.screen.active{ display:block; }
+ 
+/* ── SELECTION COMMON ── */
+.sel-section{ margin-bottom:26px; }
+ 
 .sel-title{
   font-size:10px;
   letter-spacing:3px;
@@ -95,14 +116,15 @@ header p{
   margin-bottom:12px;
   padding-left:2px;
 }
-
+ 
+/* ── CLASS FILTER (consonnes) ── */
 .class-filter-row{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:10px;
   margin-bottom:10px;
 }
-
+ 
 .cf-btn{
   padding:14px 8px;
   border-radius:12px;
@@ -113,96 +135,120 @@ header p{
   text-align:center;
   font-family:'IBM Plex Mono', monospace;
 }
-
+ 
 .cf-btn .cf-icon{
   font-family:'Sarabun', sans-serif;
   font-size:22px;
   display:block;
   margin-bottom:4px;
 }
-
+ 
 .cf-btn .cf-name{
   font-size:10px;
   letter-spacing:2px;
   text-transform:uppercase;
   display:block;
 }
-
+ 
 .cf-btn .cf-count{
   font-size:11px;
   color:var(--muted);
   margin-top:3px;
   display:block;
 }
-
-.cf-btn.haute{
-  color:var(--high);
-}
-
-.cf-btn.haute:hover{
-  background:rgba(76,201,240,.12);
-  border-color:var(--high);
-}
-
-.cf-btn.moyenne{
-  color:var(--mid);
-}
-
-.cf-btn.moyenne:hover{
-  background:rgba(248,150,30,.12);
-  border-color:var(--mid);
-}
-
-.cf-btn.basse{
-  color:var(--low);
-}
-
-.cf-btn.basse:hover{
-  background:rgba(123,198,126,.12);
-  border-color:var(--low);
-}
-
-.cf-btn.all-cls{
-  color:var(--accent);
-}
-
-.cf-btn.all-cls:hover{
-  background:rgba(201,162,39,.12);
-  border-color:var(--accent);
-}
-
-.all-row{
+ 
+.cf-btn.haute{ color:var(--high); }
+.cf-btn.haute:hover{ background:rgba(76,201,240,.12); border-color:var(--high); }
+.cf-btn.moyenne{ color:var(--mid); }
+.cf-btn.moyenne:hover{ background:rgba(248,150,30,.12); border-color:var(--mid); }
+.cf-btn.basse{ color:var(--low); }
+.cf-btn.basse:hover{ background:rgba(123,198,126,.12); border-color:var(--low); }
+.cf-btn.all-cls{ color:var(--accent); }
+.cf-btn.all-cls:hover{ background:rgba(201,162,39,.12); border-color:var(--accent); }
+ 
+.all-row{ display:grid; }
+ 
+/* ── VOWEL FILTER ── */
+.vowel-filter-row{
   display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-bottom:10px;
 }
-
+ 
+.vf-btn{
+  padding:14px 8px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  cursor:pointer;
+  transition:.2s;
+  text-align:center;
+  font-family:'IBM Plex Mono', monospace;
+}
+ 
+.vf-btn .vf-icon{
+  font-family:'Sarabun', sans-serif;
+  font-size:22px;
+  display:block;
+  margin-bottom:4px;
+}
+ 
+.vf-btn .vf-name{
+  font-size:10px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  display:block;
+}
+ 
+.vf-btn .vf-count{
+  font-size:11px;
+  color:var(--muted);
+  margin-top:3px;
+  display:block;
+}
+ 
+.vf-btn.short{ color:var(--vowel-short); }
+.vf-btn.short:hover{ background:rgba(255,126,182,.12); border-color:var(--vowel-short); }
+.vf-btn.long{ color:var(--vowel-long); }
+.vf-btn.long:hover{ background:rgba(126,184,255,.12); border-color:var(--vowel-long); }
+.vf-btn.special{ color:var(--vowel-special); }
+.vf-btn.special:hover{ background:rgba(127,255,212,.12); border-color:var(--vowel-special); }
+.vf-btn.all-v{ color:var(--vowel); }
+.vf-btn.all-v:hover{ background:rgba(184,127,255,.12); border-color:var(--vowel); }
+ 
+/* ── GRIDS ── */
 .consonant-grid{
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(54px,1fr));
   gap:8px;
 }
-
+ 
+.vowel-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(76px,1fr));
+  gap:8px;
+}
+ 
 .cg-item{
   background:var(--surface);
   border:1px solid var(--border);
   border-radius:10px;
-
   padding:8px 4px 6px;
-
   text-align:center;
   cursor:pointer;
   transition:.15s;
   position:relative;
-
   user-select:none;
 }
-
+ 
 .cg-item .cg-thai{
   font-family:'Sarabun', sans-serif;
   font-size:26px;
   display:block;
   line-height:1.1;
 }
-
+ 
 .cg-item .cg-rom{
   font-size:9px;
   color:var(--muted);
@@ -210,42 +256,54 @@ header p{
   margin-top:2px;
   display:block;
 }
-
-.cg-item:hover{
-  transform:translateY(-2px);
+ 
+.cg-item:hover{ transform:translateY(-2px); }
+ 
+.cg-item.haute.selected, .cg-item.haute:hover{ background:rgba(76,201,240,.12); border-color:var(--high); }
+.cg-item.haute.selected .cg-thai{ color:var(--high); }
+.cg-item.moyenne.selected, .cg-item.moyenne:hover{ background:rgba(248,150,30,.12); border-color:var(--mid); }
+.cg-item.moyenne.selected .cg-thai{ color:var(--mid); }
+.cg-item.basse.selected, .cg-item.basse:hover{ background:rgba(123,198,126,.12); border-color:var(--low); }
+.cg-item.basse.selected .cg-thai{ color:var(--low); }
+ 
+/* vowel grid items */
+.vg-item{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:10px 6px 8px;
+  text-align:center;
+  cursor:pointer;
+  transition:.15s;
+  position:relative;
+  user-select:none;
 }
-
-.cg-item.haute.selected,
-.cg-item.haute:hover{
-  background:rgba(76,201,240,.12);
-  border-color:var(--high);
+ 
+.vg-item .vg-thai{
+  font-family:'Sarabun', sans-serif;
+  font-size:22px;
+  display:block;
+  line-height:1.2;
+  margin-bottom:2px;
 }
-
-.cg-item.haute.selected .cg-thai{
-  color:var(--high);
+ 
+.vg-item .vg-rom{
+  font-size:9px;
+  color:var(--muted);
+  letter-spacing:1px;
+  display:block;
 }
-
-.cg-item.moyenne.selected,
-.cg-item.moyenne:hover{
-  background:rgba(248,150,30,.12);
-  border-color:var(--mid);
-}
-
-.cg-item.moyenne.selected .cg-thai{
-  color:var(--mid);
-}
-
-.cg-item.basse.selected,
-.cg-item.basse:hover{
-  background:rgba(123,198,126,.12);
-  border-color:var(--low);
-}
-
-.cg-item.basse.selected .cg-thai{
-  color:var(--low);
-}
-
-.cg-check{
+ 
+.vg-item:hover{ transform:translateY(-2px); }
+ 
+.vg-item.short.selected, .vg-item.short:hover{ background:rgba(255,126,182,.12); border-color:var(--vowel-short); }
+.vg-item.short.selected .vg-thai{ color:var(--vowel-short); }
+.vg-item.long.selected, .vg-item.long:hover{ background:rgba(126,184,255,.12); border-color:var(--vowel-long); }
+.vg-item.long.selected .vg-thai{ color:var(--vowel-long); }
+.vg-item.special.selected, .vg-item.special:hover{ background:rgba(127,255,212,.12); border-color:var(--vowel-special); }
+.vg-item.special.selected .vg-thai{ color:var(--vowel-special); }
+ 
+.cg-check, .vg-check{
   position:absolute;
   top:3px;
   right:4px;
@@ -253,77 +311,62 @@ header p{
   opacity:0;
   transition:.15s;
 }
-
-.cg-item.selected .cg-check{
-  opacity:1;
-}
-
+ 
+.cg-item.selected .cg-check,
+.vg-item.selected .vg-check{ opacity:1; }
+ 
 .sel-actions{
   display:flex;
   gap:8px;
   margin-top:12px;
   flex-wrap:wrap;
 }
-
+ 
 .sel-action-btn{
   font-family:'IBM Plex Mono', monospace;
   font-size:11px;
   letter-spacing:1px;
-
   padding:6px 12px;
-
   border-radius:6px;
   border:1px solid var(--border);
-
   background:var(--surface);
   color:var(--muted);
-
   cursor:pointer;
   transition:.15s;
 }
-
-.sel-action-btn:hover{
-  color:var(--text);
-  border-color:var(--muted);
-}
-
+ 
+.sel-action-btn:hover{ color:var(--text); border-color:var(--muted); }
+ 
 .start-bar{
   position:sticky;
   bottom:0;
-
   background:linear-gradient(to top,var(--bg) 70%,transparent);
-
   padding:16px 0 4px;
   margin-top:16px;
 }
-
+ 
 .start-btn{
   width:100%;
   padding:15px;
-
   background:var(--accent);
   color:#0a0a12;
-
   border:none;
   border-radius:12px;
-
   font-family:'IBM Plex Mono', monospace;
   font-size:14px;
   font-weight:600;
   letter-spacing:2px;
-
   cursor:pointer;
   transition:.2s;
-
   text-transform:uppercase;
 }
-
+ 
 .start-btn:hover{
   background:#e0b830;
   transform:translateY(-2px);
   box-shadow:0 8px 24px rgba(201,162,39,.25);
 }
-
+ 
 .start-btn:disabled{
   background:var(--border);
   color:var(--muted);
@@ -331,22 +374,21 @@ header p{
   transform:none;
   box-shadow:none;
 }
-
+ 
 .start-label{
   text-align:center;
   font-size:12px;
   color:var(--muted);
   margin-bottom:8px;
 }
-
-/* ───────────── QUIZ ───────────── */
-
+ 
+/* ── QUIZ SCREEN ── */
 .progress-bar-wrap{
   width:100%;
   max-width:680px;
   margin-bottom:10px;
 }
-
+ 
 .progress-meta{
   display:flex;
   justify-content:space-between;
@@ -354,7 +396,7 @@ header p{
   color:var(--muted);
   margin-bottom:6px;
 }
-
+ 
 .progress-track{
   width:100%;
   height:3px;
@@ -362,60 +404,70 @@ header p{
   border-radius:2px;
   overflow:hidden;
 }
-
+ 
 .progress-fill{
   height:100%;
   background:linear-gradient(90deg,var(--accent),var(--high));
   transition:.4s ease;
 }
-
+ 
 .card{
   background:var(--card);
   border:1px solid var(--border);
   border-radius:16px;
-
   padding:36px 32px;
-
   width:100%;
   max-width:680px;
-
   position:relative;
   overflow:hidden;
 }
-
+ 
 .card::before{
   content:'';
   position:absolute;
-  top:0;
-  left:0;
-  right:0;
+  top:0; left:0; right:0;
   height:2px;
-
-  background:linear-gradient(
-    90deg,
-    transparent,
-    var(--accent),
-    transparent
-  );
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);
 }
-
+ 
+.card.vowel-mode::before{
+  background:linear-gradient(90deg,transparent,var(--vowel),transparent);
+}
+ 
 .consonant-display{
   text-align:center;
   margin-bottom:28px;
 }
-
+ 
 .thai-char{
   font-family:'Sarabun', sans-serif;
   font-size:clamp(72px,18vw,120px);
-
   color:var(--text);
-
   line-height:1;
   display:block;
-
   text-shadow:0 0 60px rgba(201,162,39,.2);
 }
-
+ 
+.vowel-mode .thai-char{
+  text-shadow:0 0 60px rgba(184,127,255,.25);
+  font-size:clamp(52px,14vw,90px);
+}
+ 
+/* vowel length sub-info */
+.vowel-length-badge{
+  display:inline-block;
+  font-size:10px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  padding:3px 10px;
+  border-radius:20px;
+  margin-bottom:6px;
+}
+ 
+.vowel-length-badge.short{ background:rgba(255,126,182,.12); color:var(--vowel-short); }
+.vowel-length-badge.long{ background:rgba(126,184,255,.12); color:var(--vowel-long); }
+.vowel-length-badge.special{ background:rgba(127,255,212,.12); color:var(--vowel-special); }
+ 
 .section-label{
   font-size:11px;
   letter-spacing:2px;
@@ -423,156 +475,128 @@ header p{
   text-transform:uppercase;
   margin-bottom:10px;
 }
-
+ 
 .romanization-input{
   width:100%;
-
   background:var(--surface);
   border:1px solid var(--border);
   border-radius:10px;
-
   padding:14px 18px;
-
   font-family:'IBM Plex Mono', monospace;
   font-size:20px;
   color:var(--text);
-
   outline:none;
-
   transition:.2s;
-
   margin-bottom:24px;
-
   text-align:center;
   letter-spacing:2px;
 }
-
-.romanization-input:focus{
-  border-color:var(--accent);
-  box-shadow:0 0 0 3px rgba(201,162,39,.1);
+ 
+.romanization-input:focus{ border-color:var(--accent); box-shadow:0 0 0 3px rgba(201,162,39,.1); }
+.vowel-mode .romanization-input:focus{ border-color:var(--vowel); box-shadow:0 0 0 3px rgba(184,127,255,.1); }
+.romanization-input.correct{ border-color:var(--correct); background:rgba(123,198,126,.05); }
+.romanization-input.wrong{ border-color:var(--wrong); background:rgba(230,57,70,.05); }
+ 
+/* length section for vowels */
+.length-section{ margin-bottom:28px; }
+ 
+.length-buttons{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
 }
-
-.romanization-input.correct{
-  border-color:var(--correct);
-  background:rgba(123,198,126,.05);
+ 
+.length-btn{
+  padding:12px 8px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--muted);
+  font-family:'IBM Plex Mono', monospace;
+  font-size:11px;
+  cursor:pointer;
+  transition:.2s;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+  letter-spacing:1px;
+  text-transform:uppercase;
 }
-
-.romanization-input.wrong{
-  border-color:var(--wrong);
-  background:rgba(230,57,70,.05);
-}
-
-.class-section{
-  margin-bottom:28px;
-}
-
+ 
+.length-btn.short{ color:var(--vowel-short); }
+.length-btn.long{ color:var(--vowel-long); }
+.length-btn.special{ color:var(--vowel-special); }
+ 
+.length-btn.short.selected{ background:rgba(255,126,182,.1); border-color:var(--vowel-short); }
+.length-btn.long.selected{ background:rgba(126,184,255,.1); border-color:var(--vowel-long); }
+.length-btn.special.selected{ background:rgba(127,255,212,.1); border-color:var(--vowel-special); }
+ 
+/* consonant class section */
+.class-section{ margin-bottom:28px; }
+ 
 .class-buttons{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:10px;
 }
-
+ 
 .class-btn{
   padding:12px 8px;
-
   border-radius:10px;
   border:1px solid var(--border);
-
   background:var(--surface);
-
   color:var(--muted);
-
   font-family:'IBM Plex Mono', monospace;
   font-size:13px;
-
   cursor:pointer;
   transition:.2s;
-
   display:flex;
   flex-direction:column;
   align-items:center;
   gap:4px;
 }
-
-.class-btn .class-label{
-  font-size:10px;
-  letter-spacing:2px;
-  text-transform:uppercase;
-}
-
-.class-btn .class-example{
-  font-family:'Sarabun', sans-serif;
-  font-size:18px;
-}
-
-.class-btn.haute{
-  color:var(--high);
-}
-
-.class-btn.moyenne{
-  color:var(--mid);
-}
-
-.class-btn.basse{
-  color:var(--low);
-}
-
-.class-btn.selected{
-  border-color:currentColor;
-}
-
-.class-btn.haute.selected{
-  background:rgba(76,201,240,.1);
-}
-
-.class-btn.moyenne.selected{
-  background:rgba(248,150,30,.1);
-}
-
-.class-btn.basse.selected{
-  background:rgba(123,198,126,.1);
-}
-
+ 
+.class-btn .class-label{ font-size:10px; letter-spacing:2px; text-transform:uppercase; }
+.class-btn .class-example{ font-family:'Sarabun', sans-serif; font-size:18px; }
+.class-btn.haute{ color:var(--high); }
+.class-btn.moyenne{ color:var(--mid); }
+.class-btn.basse{ color:var(--low); }
+.class-btn.selected{ border-color:currentColor; }
+.class-btn.haute.selected{ background:rgba(76,201,240,.1); }
+.class-btn.moyenne.selected{ background:rgba(248,150,30,.1); }
+.class-btn.basse.selected{ background:rgba(123,198,126,.1); }
+ 
 .submit-btn{
   width:100%;
   padding:14px;
-
   background:var(--accent);
   color:#0a0a12;
-
   border:none;
   border-radius:10px;
-
   font-family:'IBM Plex Mono', monospace;
   font-size:14px;
   font-weight:600;
   letter-spacing:2px;
-
   cursor:pointer;
   transition:.2s;
-
   text-transform:uppercase;
 }
-
-.submit-btn:hover{
-  background:#e0b830;
-}
-
+ 
+.submit-btn:hover{ background:#e0b830; }
+.vowel-mode .submit-btn{ background:var(--vowel); }
+.vowel-mode .submit-btn:hover{ background:#c9a0ff; }
+ 
 .feedback{
   text-align:center;
   margin-top:16px;
   font-size:13px;
   min-height:20px;
 }
-
-.feedback.correct{
-  color:var(--correct);
-}
-
-.feedback.wrong{
-  color:var(--wrong);
-}
-
+ 
+.feedback.correct{ color:var(--correct); }
+.feedback.wrong{ color:var(--wrong); }
+ 
 .hint-text{
   font-size:11px;
   color:var(--muted);
@@ -580,918 +604,780 @@ header p{
   margin-top:8px;
   letter-spacing:1px;
 }
-
+ 
 .back-link{
   display:inline-flex;
   align-items:center;
   gap:6px;
-
   font-size:11px;
   color:var(--muted);
-
   letter-spacing:1px;
   cursor:pointer;
-
   margin-bottom:16px;
-
   background:none;
   border:none;
-
   font-family:'IBM Plex Mono', monospace;
 }
-
+ 
 .mode-badge{
   display:inline-block;
-
   font-size:10px;
   letter-spacing:2px;
   text-transform:uppercase;
-
   padding:3px 10px;
   border-radius:20px;
-
   margin-bottom:6px;
 }
-
-.mode-badge.haute{
-  background:rgba(76,201,240,.12);
-  color:var(--high);
-}
-
-.mode-badge.moyenne{
-  background:rgba(248,150,30,.12);
-  color:var(--mid);
-}
-
-.mode-badge.basse{
-  background:rgba(123,198,126,.12);
-  color:var(--low);
-}
-
-.mode-badge.all{
-  background:rgba(201,162,39,.12);
-  color:var(--accent);
-}
-
-.mode-badge.custom{
-  background:rgba(201,162,39,.12);
-  color:var(--accent);
-}
-
-/* ───────────── SCORE ───────────── */
-
+ 
+.mode-badge.haute{ background:rgba(76,201,240,.12); color:var(--high); }
+.mode-badge.moyenne{ background:rgba(248,150,30,.12); color:var(--mid); }
+.mode-badge.basse{ background:rgba(123,198,126,.12); color:var(--low); }
+.mode-badge.all{ background:rgba(201,162,39,.12); color:var(--accent); }
+.mode-badge.custom{ background:rgba(201,162,39,.12); color:var(--accent); }
+.mode-badge.short{ background:rgba(255,126,182,.12); color:var(--vowel-short); }
+.mode-badge.long{ background:rgba(126,184,255,.12); color:var(--vowel-long); }
+.mode-badge.special{ background:rgba(127,255,212,.12); color:var(--vowel-special); }
+.mode-badge.vowels-all{ background:rgba(184,127,255,.12); color:var(--vowel); }
+ 
+/* ── SCORE ── */
 .score-big{
   font-family:'Cinzel Decorative', serif;
   font-size:clamp(48px,15vw,80px);
   color:var(--accent);
-
   margin:16px 0 6px;
   text-align:center;
 }
-
+ 
 .score-sub{
   color:var(--muted);
   font-size:13px;
   margin-bottom:24px;
   text-align:center;
 }
-
+ 
 .score-breakdown{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:12px;
 }
-
+ 
 .score-stat{
   background:var(--surface);
   border:1px solid var(--border);
   border-radius:10px;
-
   padding:16px 8px;
   text-align:center;
 }
-
-.score-stat .val{
-  font-size:24px;
-  font-weight:600;
-}
-
-.score-stat .lbl{
-  font-size:10px;
-  color:var(--muted);
-  text-transform:uppercase;
-}
-
+ 
+.score-stat .val{ font-size:24px; font-weight:600; }
+.score-stat .lbl{ font-size:10px; color:var(--muted); text-transform:uppercase; }
+ 
 .score-btns{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:10px;
   margin-top:20px;
 }
-
-.menu-btn,
-.restart-btn{
+ 
+.menu-btn, .restart-btn{
   padding:13px;
   border-radius:10px;
   cursor:pointer;
-
   font-family:'IBM Plex Mono', monospace;
   text-transform:uppercase;
+  font-size:12px;
+  letter-spacing:1px;
 }
-
-.menu-btn{
-  border:1px solid var(--border);
-  background:var(--surface);
-  color:var(--text);
-}
-
-.restart-btn{
-  border:1px solid var(--accent);
-  background:transparent;
-  color:var(--accent);
-}
+ 
+.menu-btn{ border:1px solid var(--border); background:var(--surface); color:var(--text); }
+.restart-btn{ border:1px solid var(--accent); background:transparent; color:var(--accent); }
 </style>
 </head>
-
+ 
 <body>
-
+ 
 <header>
-  <h1>พยัญชนะ THAI</h1>
-  <p>Quiz · Consonnes · Romanisation & Classe</p>
+  <h1>ภาษาไทย QUIZ</h1>
+  <p>Consonnes & Voyelles · Romanisation & Classe</p>
 </header>
-
-<!-- ───────────── MENU ───────────── -->
-
-<div class="screen active" id="screen-select">
-
+ 
+<!-- ── TAB NAV ── -->
+<div class="tab-nav" id="main-tab-nav">
+  <button class="tab-btn active" onclick="switchMode('consonants')">Consonnes</button>
+  <button class="tab-btn" onclick="switchMode('vowels')">Voyelles</button>
+</div>
+ 
+<!-- ══════════════════════════════════════
+     CONSONNES — MENU
+═══════════════════════════════════════ -->
+<div class="screen active" id="screen-select-consonants">
+ 
   <div class="sel-section">
-
-    <div class="sel-title">
-      Entraîner par classe tonale
-    </div>
-
+    <div class="sel-title">Entraîner par classe tonale</div>
+ 
     <div class="class-filter-row">
-
       <button class="cf-btn haute" onclick="filterByClass('haute')">
         <span class="cf-icon">ข ฉ ห</span>
         <span class="cf-name">Classe Haute</span>
         <span class="cf-count" id="count-haute"></span>
       </button>
-
       <button class="cf-btn moyenne" onclick="filterByClass('moyenne')">
         <span class="cf-icon">ก จ ด</span>
         <span class="cf-name">Classe Moyenne</span>
         <span class="cf-count" id="count-moyenne"></span>
       </button>
-
       <button class="cf-btn basse" onclick="filterByClass('basse')">
         <span class="cf-icon">ง น ม</span>
         <span class="cf-name">Classe Basse</span>
         <span class="cf-count" id="count-basse"></span>
       </button>
-
     </div>
-
+ 
     <div class="all-row">
-
       <button class="cf-btn all-cls" onclick="filterByClass('all')">
         <span class="cf-icon">ก ข ค ง จ ฉ ช ซ</span>
         <span class="cf-name">Toutes les consonnes</span>
         <span class="cf-count" id="count-all"></span>
       </button>
-
     </div>
-
   </div>
-
+ 
   <div class="sel-section">
-
-    <div class="sel-title">
-      Sélection individuelle
-    </div>
-
+    <div class="sel-title">Sélection individuelle</div>
     <div class="consonant-grid" id="consonant-grid"></div>
-
     <div class="sel-actions">
       <button class="sel-action-btn" onclick="selectAll()">Tout sélectionner</button>
       <button class="sel-action-btn" onclick="deselectAll()">Tout désélectionner</button>
       <button class="sel-action-btn" onclick="invertSelection()">Inverser</button>
     </div>
-
   </div>
-
+ 
   <div class="start-bar">
-
-    <div class="start-label" id="start-label">
-      Aucune consonne sélectionnée
-    </div>
-
-    <button
-      class="start-btn"
-      id="start-btn"
-      disabled
-      onclick="startQuiz()"
-    >
+    <div class="start-label" id="start-label-c">Aucune consonne sélectionnée</div>
+    <button class="start-btn" id="start-btn-c" disabled onclick="startConsonantQuiz()">
       Commencer le quiz →
     </button>
-
   </div>
-
 </div>
-
-<!-- ───────────── QUIZ ───────────── -->
-
+ 
+<!-- ══════════════════════════════════════
+     VOYELLES — MENU
+═══════════════════════════════════════ -->
+<div class="screen" id="screen-select-vowels">
+ 
+  <div class="sel-section">
+    <div class="sel-title">Filtrer par type de voyelle</div>
+ 
+    <div class="vowel-filter-row">
+      <button class="vf-btn short" onclick="filterByVowelType('short')">
+        <span class="vf-icon">◌ะ  ◌ิ  ◌ึ</span>
+        <span class="vf-name">Brèves</span>
+        <span class="vf-count" id="count-short"></span>
+      </button>
+      <button class="vf-btn long" onclick="filterByVowelType('long')">
+        <span class="vf-icon">◌า  ◌ี  ◌ู</span>
+        <span class="vf-name">Longues</span>
+        <span class="vf-count" id="count-long"></span>
+      </button>
+      <button class="vf-btn special" onclick="filterByVowelType('special')">
+        <span class="vf-icon">เ◌า  แ◌  ◌ัว</span>
+        <span class="vf-name">Complexes</span>
+        <span class="vf-count" id="count-special"></span>
+      </button>
+    </div>
+ 
+    <div class="all-row">
+      <button class="vf-btn all-v" onclick="filterByVowelType('all')">
+        <span class="vf-icon">◌า  เ◌  แ◌  โ◌  ◌ัว  เ◌า</span>
+        <span class="vf-name">Toutes les voyelles</span>
+        <span class="vf-count" id="count-vowels-all"></span>
+      </button>
+    </div>
+  </div>
+ 
+  <div class="sel-section">
+    <div class="sel-title">Sélection individuelle</div>
+    <div class="vowel-grid" id="vowel-grid"></div>
+    <div class="sel-actions">
+      <button class="sel-action-btn" onclick="selectAllVowels()">Tout sélectionner</button>
+      <button class="sel-action-btn" onclick="deselectAllVowels()">Tout désélectionner</button>
+      <button class="sel-action-btn" onclick="invertVowelSelection()">Inverser</button>
+    </div>
+  </div>
+ 
+  <!-- legend -->
+  <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px;font-size:11px;">
+    <span style="color:var(--vowel-short)">◼ Brève</span>
+    <span style="color:var(--vowel-long)">◼ Longue</span>
+    <span style="color:var(--vowel-special)">◼ Complexe / diphtongue</span>
+    <span style="color:var(--muted)">◌ = emplacement de la consonne</span>
+  </div>
+ 
+  <div class="start-bar">
+    <div class="start-label" id="start-label-v">Aucune voyelle sélectionnée</div>
+    <button class="start-btn" id="start-btn-v" disabled onclick="startVowelQuiz()">
+      Commencer le quiz →
+    </button>
+  </div>
+</div>
+ 
+<!-- ══════════════════════════════════════
+     QUIZ SCREEN (shared)
+═══════════════════════════════════════ -->
 <div class="screen" id="screen-quiz">
-
-  <button class="back-link" onclick="goToMenu()">
-    ← Menu
-  </button>
-
+ 
+  <button class="back-link" onclick="goToMenu()">← Menu</button>
+ 
   <div class="progress-bar-wrap">
-
     <div class="progress-meta">
       <span id="progress-text"></span>
       <span id="score-text"></span>
     </div>
-
     <div class="progress-track">
       <div class="progress-fill" id="progress-fill"></div>
     </div>
-
   </div>
-
-  <div class="card">
-
+ 
+  <div class="card" id="quiz-card">
+ 
     <div id="card-content">
-
+ 
       <div class="consonant-display">
-
         <div id="mode-badge-display"></div>
-
         <span class="thai-char" id="thai-char"></span>
-
+        <div id="vowel-sub-info" style="display:none;margin-top:8px;">
+          <span id="vowel-length-badge" class="vowel-length-badge"></span>
+        </div>
       </div>
-
-      <div class="section-label">
-        Romanisation
-      </div>
-
+ 
+      <div class="section-label">Romanisation / Transcription</div>
+ 
       <input
         type="text"
         class="romanization-input"
         id="romanization-input"
-        placeholder="ex: k, kh, ng, ch..."
+        placeholder="ex: a, aa, i, uu, ae..."
         autocomplete="off"
         spellcheck="false"
       >
-
+ 
+      <!-- Consonant class section -->
       <div class="class-section" id="class-section-wrap">
-
-        <div class="section-label">
-          Classe de la consonne
-        </div>
-
+        <div class="section-label">Classe de la consonne</div>
         <div class="class-buttons">
-
-          <button
-            class="class-btn haute"
-            data-class="haute"
-            onclick="selectClass('haute')"
-          >
+          <button class="class-btn haute" data-class="haute" onclick="selectClass('haute')">
             <span class="class-label">Haute</span>
             <span class="class-example">ข ฉ ห</span>
           </button>
-
-          <button
-            class="class-btn moyenne"
-            data-class="moyenne"
-            onclick="selectClass('moyenne')"
-          >
+          <button class="class-btn moyenne" data-class="moyenne" onclick="selectClass('moyenne')">
             <span class="class-label">Moyenne</span>
             <span class="class-example">ก จ ด</span>
           </button>
-
-          <button
-            class="class-btn basse"
-            data-class="basse"
-            onclick="selectClass('basse')"
-          >
+          <button class="class-btn basse" data-class="basse" onclick="selectClass('basse')">
             <span class="class-label">Basse</span>
             <span class="class-example">ง น ม</span>
           </button>
-
         </div>
-
       </div>
-
-      <button
-        class="submit-btn"
-        id="submit-btn"
-        onclick="submitAnswer()"
-      >
-        Valider →
-      </button>
-
+ 
+      <!-- Vowel length section -->
+      <div class="length-section" id="length-section-wrap" style="display:none;">
+        <div class="section-label">Durée de la voyelle</div>
+        <div class="length-buttons">
+          <button class="length-btn short" data-len="short" onclick="selectLength('short')">Brève</button>
+          <button class="length-btn long" data-len="long" onclick="selectLength('long')">Longue</button>
+          <button class="length-btn special" data-len="special" onclick="selectLength('special')">Complexe</button>
+        </div>
+      </div>
+ 
+      <button class="submit-btn" id="submit-btn" onclick="submitAnswer()">Valider →</button>
+ 
       <div class="feedback" id="feedback"></div>
-
-      <div class="hint-text">
-        Entrée pour valider · 1/2/3 pour la classe
-      </div>
-
+      <div class="hint-text" id="hint-text">Entrée pour valider · 1/2/3 pour la classe</div>
+ 
     </div>
-
+ 
     <div id="score-screen" style="display:none">
-
-      <div style="font-size:48px;text-align:center">
-        🏆
-      </div>
-
+      <div style="font-size:48px;text-align:center">🏆</div>
       <div class="score-big" id="final-score"></div>
-
       <div class="score-sub" id="final-sub"></div>
-
       <div class="score-breakdown">
-
         <div class="score-stat">
           <span class="val" id="stat-correct"></span>
           <span class="lbl">Corrects</span>
         </div>
-
         <div class="score-stat">
           <span class="val" id="stat-wrong"></span>
           <span class="lbl">Erreurs</span>
         </div>
-
         <div class="score-stat">
           <span class="val" id="stat-pct"></span>
           <span class="lbl">Réussite</span>
         </div>
-
       </div>
-
       <div class="score-btns">
-
-        <button class="menu-btn" onclick="goToMenu()">
-          ← Menu
-        </button>
-
-        <button class="restart-btn" onclick="restartSameQuiz()">
-          ↺ Rejouer
-        </button>
-
+        <button class="menu-btn" onclick="goToMenu()">← Menu</button>
+        <button class="restart-btn" onclick="restartSameQuiz()">↺ Rejouer</button>
       </div>
-
     </div>
-
+ 
   </div>
-
 </div>
-
+ 
 <script>
+/* ══════════════════════════════════════
+   DATA — CONSONNES
+═══════════════════════════════════════ */
 const consonants = [
-
   { thai:'ก', rom:['k'], cls:'moyenne' },
-
   { thai:'ข', rom:['kh'], cls:'haute' },
   { thai:'ฃ', rom:['kh'], cls:'haute' },
-
   { thai:'ค', rom:['kh'], cls:'basse' },
   { thai:'ฅ', rom:['kh'], cls:'basse' },
   { thai:'ฆ', rom:['kh'], cls:'basse' },
-
   { thai:'ง', rom:['ng'], cls:'basse' },
-
   { thai:'จ', rom:['ch'], cls:'moyenne' },
-
   { thai:'ฉ', rom:['ch'], cls:'haute' },
   { thai:'ช', rom:['ch'], cls:'basse' },
   { thai:'ฌ', rom:['ch'], cls:'basse' },
-
   { thai:'ซ', rom:['s'], cls:'basse' },
-
   { thai:'ญ', rom:['y'], cls:'basse' },
-
   { thai:'ฎ', rom:['d'], cls:'moyenne' },
   { thai:'ฏ', rom:['t'], cls:'moyenne' },
-
   { thai:'ฐ', rom:['th'], cls:'haute' },
   { thai:'ฑ', rom:['th'], cls:'basse' },
   { thai:'ฒ', rom:['th'], cls:'basse' },
-
   { thai:'ณ', rom:['n'], cls:'basse' },
-
   { thai:'ด', rom:['d'], cls:'moyenne' },
-
   { thai:'ต', rom:['t'], cls:'moyenne' },
-
   { thai:'ถ', rom:['th'], cls:'haute' },
   { thai:'ท', rom:['th'], cls:'basse' },
   { thai:'ธ', rom:['th'], cls:'basse' },
-
   { thai:'น', rom:['n'], cls:'basse' },
-
   { thai:'บ', rom:['b'], cls:'moyenne' },
-
   { thai:'ป', rom:['p'], cls:'moyenne' },
-
   { thai:'ผ', rom:['ph'], cls:'haute' },
   { thai:'ฝ', rom:['f'], cls:'haute' },
-
   { thai:'พ', rom:['ph'], cls:'basse' },
   { thai:'ฟ', rom:['f'], cls:'basse' },
   { thai:'ภ', rom:['ph'], cls:'basse' },
-
   { thai:'ม', rom:['m'], cls:'basse' },
-
   { thai:'ย', rom:['y'], cls:'basse' },
-
   { thai:'ร', rom:['r'], cls:'basse' },
-
   { thai:'ล', rom:['l'], cls:'basse' },
-
   { thai:'ว', rom:['w'], cls:'basse' },
-
   { thai:'ศ', rom:['s'], cls:'haute' },
   { thai:'ษ', rom:['s'], cls:'haute' },
   { thai:'ส', rom:['s'], cls:'haute' },
-
   { thai:'ห', rom:['h'], cls:'haute' },
-
   { thai:'ฬ', rom:['l'], cls:'basse' },
-
   { thai:'อ', rom:['silent'], cls:'moyenne' },
-
-  { thai:'ฮ', rom:['h'], cls:'basse' }
-
+  { thai:'ฮ', rom:['h'], cls:'basse' },
 ];
-
-let selectedIndices = new Set();
-
-let currentMode = null;
-
+ 
+/* ══════════════════════════════════════
+   DATA — VOYELLES
+   rom = romanisations acceptées
+   len = short | long | special
+   display = forme affichée (◌ = placeholder consonne)
+═══════════════════════════════════════ */
+const vowels = [
+  // ── brèves ──
+  { thai:'◌ะ',  display:'_ะ',  rom:['a'],    len:'short', label:'◌ะ' },
+  { thai:'◌ั',   display:'_ั',  rom:['a'],    len:'short', label:'◌ั (sara a bref)' },
+  { thai:'◌ิ',   display:'_ิ',  rom:['i'],    len:'short', label:'◌ิ' },
+  { thai:'◌ึ',   display:'_ึ',  rom:['ue','eu'],  len:'short', label:'◌ึ' },
+  { thai:'◌ุ',   display:'_ุ',  rom:['u'],    len:'short', label:'◌ุ' },
+  { thai:'เ◌ะ', display:'เ_ะ', rom:['e'],    len:'short', label:'เ◌ะ' },
+  { thai:'แ◌ะ', display:'แ_ะ', rom:['ae'],   len:'short', label:'แ◌ะ' },
+  { thai:'โ◌ะ', display:'โ_ะ', rom:['o'],    len:'short', label:'โ◌ะ' },
+  { thai:'เ◌าะ',display:'เ_าะ',rom:['o','or'], len:'short', label:'เ◌าะ' },
+  { thai:'◌ํ',   display:'_ํ',  rom:['am'],   len:'short', label:'◌ํ (sara am)' },
+  // ── longues ──
+  { thai:'◌า',  display:'_า',  rom:['aa','a:'],  len:'long', label:'◌า' },
+  { thai:'◌ี',   display:'_ี',  rom:['ii','i:'],  len:'long', label:'◌ี' },
+  { thai:'◌ื',   display:'_ื',  rom:['uee','eu:'],len:'long', label:'◌ื' },
+  { thai:'◌ู',   display:'_ู',  rom:['uu','u:'],  len:'long', label:'◌ู' },
+  { thai:'เ◌',  display:'เ_',  rom:['ee','e:'],  len:'long', label:'เ◌' },
+  { thai:'แ◌',  display:'แ_',  rom:['ae','ae:'], len:'long', label:'แ◌' },
+  { thai:'โ◌',  display:'โ_',  rom:['oo','o:'],  len:'long', label:'โ◌' },
+  { thai:'◌อ',  display:'_อ',  rom:['oe','eu'],  len:'long', label:'◌อ' },
+  { thai:'อา',  display:'อา',  rom:['aa'],       len:'long', label:'อา' },
+  // ── complexes / diphtongues ──
+  { thai:'เ◌า', display:'เ_า', rom:['ao','ow'],  len:'special', label:'เ◌า' },
+  { thai:'◌าว', display:'_าว', rom:['aow','ao'], len:'special', label:'◌าว' },
+  { thai:'เ◌ีย',display:'เ_ีย',rom:['ia','ia:'], len:'special', label:'เ◌ีย' },
+  { thai:'◌ัว', display:'_ัว', rom:['ua','ua:'], len:'special', label:'◌ัว' },
+  { thai:'เ◌ือ',display:'เ_ือ',rom:['uea','uea:'],len:'special',label:'เ◌ือ' },
+  { thai:'◌ำ',  display:'_ำ',  rom:['am'],       len:'special', label:'◌ำ (sara am)' },
+  { thai:'ไ◌',  display:'ไ_',  rom:['ai'],       len:'special', label:'ไ◌' },
+  { thai:'ใ◌',  display:'ใ_',  rom:['ai'],       len:'special', label:'ใ◌' },
+  { thai:'เ◌ย', display:'เ_ย', rom:['oei','oey'],len:'special', label:'เ◌ย' },
+  { thai:'◌วย', display:'_วย', rom:['uai'],      len:'special', label:'◌วย' },
+];
+ 
+/* ══════════════════════════════════════
+   STATE
+═══════════════════════════════════════ */
+let selectedConsonants = new Set();
+let selectedVowelIndices = new Set();
+ 
+let currentModeTab = 'consonants'; // 'consonants' | 'vowels'
+let quizType = 'consonants';       // what quiz is running
+ 
+let currentClassMode = null;  // haute/moyenne/basse/all/custom
+let currentVowelMode = null;  // short/long/special/all/custom
+ 
 let queue = [];
-
 let currentIndex = 0;
-
 let score = 0;
-
 let selectedClass = null;
-
+let selectedLength = null;
 let answered = false;
-
-let quizClassFilter = null;
-
-function initGrid(){
-
+let quizClassFilter = null;  // fixed class for consonants
+let quizLengthFilter = null; // fixed length for vowels
+ 
+/* ══════════════════════════════════════
+   TAB SWITCH
+═══════════════════════════════════════ */
+function switchMode(mode) {
+  currentModeTab = mode;
+  document.querySelectorAll('.tab-btn').forEach((b,i) => {
+    b.classList.toggle('active', (i===0 && mode==='consonants') || (i===1 && mode==='vowels'));
+  });
+  showScreen(mode === 'consonants' ? 'screen-select-consonants' : 'screen-select-vowels');
+}
+ 
+/* ══════════════════════════════════════
+   CONSONANTS GRID
+═══════════════════════════════════════ */
+function initConsonantGrid(){
   const grid = document.getElementById('consonant-grid');
-
   grid.innerHTML = '';
-
-  const counts = {
-    haute:0,
-    moyenne:0,
-    basse:0
-  };
-
+  const counts = { haute:0, moyenne:0, basse:0 };
   consonants.forEach((c,i)=>{
-
     counts[c.cls]++;
-
     const el = document.createElement('div');
-
     el.className = `cg-item ${c.cls}`;
-
-    el.innerHTML = `
-      <span class="cg-thai">${c.thai}</span>
-      <span class="cg-rom">${c.rom[0]}</span>
-      <span class="cg-check">✓</span>
-    `;
-
+    el.innerHTML = `<span class="cg-thai">${c.thai}</span><span class="cg-rom">${c.rom[0]}</span><span class="cg-check">✓</span>`;
     el.onclick = ()=>toggleConsonant(i,el);
-
     grid.appendChild(el);
-
   });
-
-  document.getElementById('count-haute').textContent =
-    counts.haute + ' consonnes';
-
-  document.getElementById('count-moyenne').textContent =
-    counts.moyenne + ' consonnes';
-
-  document.getElementById('count-basse').textContent =
-    counts.basse + ' consonnes';
-
-  document.getElementById('count-all').textContent =
-    consonants.length + ' consonnes';
+  document.getElementById('count-haute').textContent = counts.haute + ' consonnes';
+  document.getElementById('count-moyenne').textContent = counts.moyenne + ' consonnes';
+  document.getElementById('count-basse').textContent = counts.basse + ' consonnes';
+  document.getElementById('count-all').textContent = consonants.length + ' consonnes';
 }
-
+ 
 function toggleConsonant(i,el){
-
-  if(selectedIndices.has(i)){
-    selectedIndices.delete(i);
-    el.classList.remove('selected');
-  }
-  else{
-    selectedIndices.add(i);
-    el.classList.add('selected');
-  }
-
-  currentMode = 'custom';
-
-  updateStartBar();
+  if(selectedConsonants.has(i)){ selectedConsonants.delete(i); el.classList.remove('selected'); }
+  else { selectedConsonants.add(i); el.classList.add('selected'); }
+  currentClassMode = 'custom';
+  updateConsonantStartBar();
 }
-
+ 
 function filterByClass(cls){
-
-  selectedIndices.clear();
-
-  consonants.forEach((c,i)=>{
-    if(cls === 'all' || c.cls === cls){
-      selectedIndices.add(i);
-    }
-  });
-
-  document.querySelectorAll('.cg-item')
-    .forEach((el,i)=>{
-      el.classList.toggle(
-        'selected',
-        selectedIndices.has(i)
-      );
-    });
-
-  currentMode = cls;
-
-  updateStartBar();
+  selectedConsonants.clear();
+  consonants.forEach((_,i)=>{ if(cls==='all'||consonants[i].cls===cls) selectedConsonants.add(i); });
+  document.querySelectorAll('.cg-item').forEach((el,i)=>el.classList.toggle('selected',selectedConsonants.has(i)));
+  currentClassMode = cls;
+  updateConsonantStartBar();
 }
-
-function selectAll(){
-  filterByClass('all');
-}
-
-function deselectAll(){
-
-  selectedIndices.clear();
-
-  document.querySelectorAll('.cg-item')
-    .forEach(el=>el.classList.remove('selected'));
-
-  currentMode = 'custom';
-
-  updateStartBar();
-}
-
+ 
+function selectAll(){ filterByClass('all'); }
+function deselectAll(){ selectedConsonants.clear(); document.querySelectorAll('.cg-item').forEach(el=>el.classList.remove('selected')); currentClassMode='custom'; updateConsonantStartBar(); }
 function invertSelection(){
-
-  consonants.forEach((_,i)=>{
-    if(selectedIndices.has(i)){
-      selectedIndices.delete(i);
-    }
-    else{
-      selectedIndices.add(i);
-    }
+  consonants.forEach((_,i)=>{ if(selectedConsonants.has(i)) selectedConsonants.delete(i); else selectedConsonants.add(i); });
+  document.querySelectorAll('.cg-item').forEach((el,i)=>el.classList.toggle('selected',selectedConsonants.has(i)));
+  currentClassMode='custom'; updateConsonantStartBar();
+}
+ 
+function updateConsonantStartBar(){
+  const n = selectedConsonants.size;
+  document.getElementById('start-btn-c').disabled = n===0;
+  document.getElementById('start-label-c').textContent = n===0 ? 'Aucune consonne sélectionnée' : `${n} consonnes sélectionnées`;
+}
+ 
+/* ══════════════════════════════════════
+   VOWELS GRID
+═══════════════════════════════════════ */
+function initVowelGrid(){
+  const grid = document.getElementById('vowel-grid');
+  grid.innerHTML = '';
+  const counts = { short:0, long:0, special:0 };
+  vowels.forEach((v,i)=>{
+    counts[v.len]++;
+    const el = document.createElement('div');
+    el.className = `vg-item ${v.len}`;
+    el.innerHTML = `<span class="vg-thai">${v.thai}</span><span class="vg-rom">${v.rom[0]}</span><span class="vg-check">✓</span>`;
+    el.onclick = ()=>toggleVowel(i,el);
+    grid.appendChild(el);
   });
-
-  document.querySelectorAll('.cg-item')
-    .forEach((el,i)=>{
-      el.classList.toggle(
-        'selected',
-        selectedIndices.has(i)
-      );
-    });
-
-  currentMode = 'custom';
-
-  updateStartBar();
+  document.getElementById('count-short').textContent = counts.short + ' voyelles';
+  document.getElementById('count-long').textContent = counts.long + ' voyelles';
+  document.getElementById('count-special').textContent = counts.special + ' voyelles';
+  document.getElementById('count-vowels-all').textContent = vowels.length + ' voyelles';
 }
-
-function updateStartBar(){
-
-  const n = selectedIndices.size;
-
-  const btn = document.getElementById('start-btn');
-
-  btn.disabled = n === 0;
-
-  document.getElementById('start-label').textContent =
-    n === 0
-      ? 'Aucune consonne sélectionnée'
-      : `${n} consonnes sélectionnées`;
+ 
+function toggleVowel(i,el){
+  if(selectedVowelIndices.has(i)){ selectedVowelIndices.delete(i); el.classList.remove('selected'); }
+  else { selectedVowelIndices.add(i); el.classList.add('selected'); }
+  currentVowelMode='custom'; updateVowelStartBar();
 }
-
+ 
+function filterByVowelType(type){
+  selectedVowelIndices.clear();
+  vowels.forEach((_,i)=>{ if(type==='all'||vowels[i].len===type) selectedVowelIndices.add(i); });
+  document.querySelectorAll('.vg-item').forEach((el,i)=>el.classList.toggle('selected',selectedVowelIndices.has(i)));
+  currentVowelMode=type; updateVowelStartBar();
+}
+ 
+function selectAllVowels(){ filterByVowelType('all'); }
+function deselectAllVowels(){ selectedVowelIndices.clear(); document.querySelectorAll('.vg-item').forEach(el=>el.classList.remove('selected')); currentVowelMode='custom'; updateVowelStartBar(); }
+function invertVowelSelection(){
+  vowels.forEach((_,i)=>{ if(selectedVowelIndices.has(i)) selectedVowelIndices.delete(i); else selectedVowelIndices.add(i); });
+  document.querySelectorAll('.vg-item').forEach((el,i)=>el.classList.toggle('selected',selectedVowelIndices.has(i)));
+  currentVowelMode='custom'; updateVowelStartBar();
+}
+ 
+function updateVowelStartBar(){
+  const n = selectedVowelIndices.size;
+  document.getElementById('start-btn-v').disabled = n===0;
+  document.getElementById('start-label-v').textContent = n===0 ? 'Aucune voyelle sélectionnée' : `${n} voyelles sélectionnées`;
+}
+ 
+/* ══════════════════════════════════════
+   QUIZ START
+═══════════════════════════════════════ */
 function shuffle(arr){
-
-  const a = [...arr];
-
-  for(let i=a.length-1;i>0;i--){
-
-    const j = Math.floor(Math.random()*(i+1));
-
-    [a[i],a[j]] = [a[j],a[i]];
-  }
-
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
   return a;
 }
-
-function startQuiz(){
-
-  queue = shuffle(
-    [...selectedIndices].map(i=>consonants[i])
-  );
-
-  currentIndex = 0;
-  score = 0;
-  answered = false;
-
-  quizClassFilter =
-    (
-      currentMode === 'haute' ||
-      currentMode === 'moyenne' ||
-      currentMode === 'basse'
-    )
-    ? currentMode
-    : null;
-
-  document.getElementById('class-section-wrap').style.display =
-    quizClassFilter ? 'none' : 'block';
-
-  document.getElementById('mode-badge-display').innerHTML =
-    `<div class="mode-badge ${currentMode}">
-      ${currentMode}
-    </div>`;
-
+ 
+function startConsonantQuiz(){
+  quizType = 'consonants';
+  queue = shuffle([...selectedConsonants].map(i=>consonants[i]));
+  currentIndex=0; score=0; answered=false;
+  quizClassFilter = (['haute','moyenne','basse'].includes(currentClassMode)) ? currentClassMode : null;
+  quizLengthFilter = null;
+ 
+  const card = document.getElementById('quiz-card');
+  card.classList.remove('vowel-mode');
+ 
+  document.getElementById('class-section-wrap').style.display = quizClassFilter ? 'none' : 'block';
+  document.getElementById('length-section-wrap').style.display = 'none';
+  document.getElementById('vowel-sub-info').style.display = 'none';
+  document.getElementById('romanization-input').placeholder = 'ex: k, kh, ng, ch...';
+  document.getElementById('hint-text').textContent = 'Entrée pour valider · 1/2/3 pour la classe';
+ 
+  const badgeCls = currentClassMode || 'custom';
+  document.getElementById('mode-badge-display').innerHTML = `<div class="mode-badge ${badgeCls}">${badgeCls === 'all' ? 'Toutes' : badgeCls}</div>`;
+ 
   showScreen('screen-quiz');
-
-  document.getElementById('card-content').style.display = 'block';
-  document.getElementById('score-screen').style.display = 'none';
-
-  loadQuestion();
-
-  updateProgress();
+  document.getElementById('card-content').style.display='block';
+  document.getElementById('score-screen').style.display='none';
+  loadQuestion(); updateProgress();
 }
-
+ 
+function startVowelQuiz(){
+  quizType = 'vowels';
+  queue = shuffle([...selectedVowelIndices].map(i=>vowels[i]));
+  currentIndex=0; score=0; answered=false;
+  quizLengthFilter = (['short','long','special'].includes(currentVowelMode)) ? currentVowelMode : null;
+  quizClassFilter = null;
+ 
+  const card = document.getElementById('quiz-card');
+  card.classList.add('vowel-mode');
+ 
+  document.getElementById('class-section-wrap').style.display = 'none';
+  document.getElementById('length-section-wrap').style.display = quizLengthFilter ? 'none' : 'block';
+  document.getElementById('romanization-input').placeholder = 'ex: a, aa, i, uu, ae...';
+  document.getElementById('hint-text').textContent = 'Entrée pour valider · 1/2/3 pour la durée';
+ 
+  const badgeCls = currentVowelMode==='all' ? 'vowels-all' : (currentVowelMode||'custom');
+  document.getElementById('mode-badge-display').innerHTML = `<div class="mode-badge ${badgeCls}">${currentVowelMode==='all'?'Voyelles':badgeCls}</div>`;
+ 
+  showScreen('screen-quiz');
+  document.getElementById('card-content').style.display='block';
+  document.getElementById('score-screen').style.display='none';
+  loadQuestion(); updateProgress();
+}
+ 
+/* ══════════════════════════════════════
+   QUESTION
+═══════════════════════════════════════ */
 function loadQuestion(){
-
-  answered = false;
-
-  selectedClass = quizClassFilter || null;
-
-  const c = queue[currentIndex];
-
-  document.getElementById('thai-char').textContent =
-    c.thai;
-
+  answered=false; selectedClass=null; selectedLength=null;
+  const item = queue[currentIndex];
+ 
+  // display
+  document.getElementById('thai-char').textContent = item.thai;
+ 
+  // vowel sub-info
+  if(quizType==='vowels'){
+    const sub = document.getElementById('vowel-sub-info');
+    if(quizLengthFilter){
+      sub.style.display='none';
+    } else {
+      sub.style.display='block';
+      const badge = document.getElementById('vowel-length-badge');
+      badge.className = `vowel-length-badge ${item.len}`;
+      badge.textContent = {short:'Brève',long:'Longue',special:'Complexe'}[item.len];
+    }
+  } else {
+    document.getElementById('vowel-sub-info').style.display='none';
+  }
+ 
   const input = document.getElementById('romanization-input');
-
-  input.value = '';
-
-  input.disabled = false;
-
-  input.className = 'romanization-input';
-
-  document.getElementById('feedback').textContent = '';
-
-  document.querySelectorAll('.class-btn')
-    .forEach(btn=>btn.classList.remove('selected'));
-
+  input.value=''; input.disabled=false;
+  input.className='romanization-input';
+  document.getElementById('feedback').textContent='';
+ 
+  document.querySelectorAll('.class-btn').forEach(b=>b.classList.remove('selected'));
+  document.querySelectorAll('.length-btn').forEach(b=>b.classList.remove('selected'));
+ 
+  // if class was pre-filtered
+  if(quizClassFilter) selectedClass = quizClassFilter;
+  if(quizLengthFilter) selectedLength = quizLengthFilter;
+ 
   input.focus();
 }
-
+ 
 function selectClass(cls){
-
-  if(answered || quizClassFilter) return;
-
-  selectedClass = cls;
-
-  document.querySelectorAll('.class-btn')
-    .forEach(btn=>{
-
-      btn.classList.toggle(
-        'selected',
-        btn.dataset.class === cls
-      );
-
-    });
+  if(answered||quizClassFilter) return;
+  selectedClass=cls;
+  document.querySelectorAll('.class-btn').forEach(b=>b.classList.toggle('selected',b.dataset.class===cls));
 }
-
+ 
+function selectLength(len){
+  if(answered||quizLengthFilter) return;
+  selectedLength=len;
+  document.querySelectorAll('.length-btn').forEach(b=>b.classList.toggle('selected',b.dataset.len===len));
+}
+ 
 function submitAnswer(){
-
-  if(answered){
-    nextQuestion();
-    return;
+  if(answered){ nextQuestion(); return; }
+ 
+  const item = queue[currentIndex];
+  const input = document.getElementById('romanization-input');
+  const userRom = input.value.trim().toLowerCase();
+ 
+  if(!userRom){ showFeedback('Entre une romanisation','wrong'); return; }
+ 
+  if(quizType==='consonants' && !selectedClass){
+    showFeedback('Choisis une classe','wrong'); return;
   }
-
-  const c = queue[currentIndex];
-
-  const input =
-    document.getElementById('romanization-input');
-
-  const userRom =
-    input.value.trim().toLowerCase();
-
-  if(!userRom){
-    showFeedback('Entre une romanisation','wrong');
-    return;
+  if(quizType==='vowels' && !selectedLength && !quizLengthFilter){
+    showFeedback('Choisis une durée','wrong'); return;
   }
-
-  if(!selectedClass){
-    showFeedback('Choisis une classe','wrong');
-    return;
-  }
-
-  answered = true;
-
-  input.disabled = true;
-
-  const romCorrect =
-    c.rom.includes(userRom);
-
-  const classCorrect =
-    quizClassFilter
-      ? true
-      : selectedClass === c.cls;
-
-  if(romCorrect && classCorrect){
-
+ 
+  answered=true; input.disabled=true;
+ 
+  const romCorrect = item.rom.includes(userRom);
+  const secondaryCorrect = quizType==='consonants'
+    ? (quizClassFilter ? true : selectedClass===item.cls)
+    : (quizLengthFilter ? true : selectedLength===item.len);
+ 
+  if(romCorrect && secondaryCorrect){
     score++;
-
     input.classList.add('correct');
-
     showFeedback('✓ Correct','correct');
-  }
-  else{
-
+  } else {
     input.classList.add('wrong');
-
-    showFeedback(
-      `✗ ${c.rom[0]} · ${c.cls}`,
-      'wrong'
-    );
+    const correctRom = item.rom[0];
+    const correctSecondary = quizType==='consonants' ? item.cls : {short:'Brève',long:'Longue',special:'Complexe'}[item.len];
+    showFeedback(`✗ ${correctRom} · ${correctSecondary}`, 'wrong');
   }
-
-  document.getElementById('submit-btn').textContent =
-    'Suivant →';
-
+ 
+  document.getElementById('submit-btn').textContent = 'Suivant →';
   updateProgress();
 }
-
+ 
 function nextQuestion(){
-
   currentIndex++;
-
-  if(currentIndex >= queue.length){
-    showScore();
-  }
-  else{
-
-    document.getElementById('submit-btn').textContent =
-      'Valider →';
-
-    loadQuestion();
-
-    updateProgress();
+  if(currentIndex>=queue.length){ showScore(); }
+  else {
+    document.getElementById('submit-btn').textContent='Valider →';
+    loadQuestion(); updateProgress();
   }
 }
-
+ 
 function updateProgress(){
-
-  const total = queue.length;
-
-  const progress =
-    (
-      (answered ? currentIndex + 1 : currentIndex)
-      / total
-    ) * 100;
-
-  document.getElementById('progress-fill').style.width =
-    progress + '%';
-
-  document.getElementById('progress-text').textContent =
-    `${Math.min(currentIndex+1,total)} / ${total}`;
-
-  document.getElementById('score-text').textContent =
-    `Score : ${score}`;
+  const total=queue.length;
+  const progress=((answered?currentIndex+1:currentIndex)/total)*100;
+  document.getElementById('progress-fill').style.width=progress+'%';
+  document.getElementById('progress-text').textContent=`${Math.min(currentIndex+1,total)} / ${total}`;
+  document.getElementById('score-text').textContent=`Score : ${score}`;
 }
-
+ 
 function showFeedback(msg,cls){
-
-  const el = document.getElementById('feedback');
-
-  el.textContent = msg;
-
-  el.className = `feedback ${cls}`;
+  const el=document.getElementById('feedback');
+  el.textContent=msg; el.className=`feedback ${cls}`;
 }
-
+ 
 function showScore(){
-
-  document.getElementById('card-content').style.display =
-    'none';
-
-  document.getElementById('score-screen').style.display =
-    'block';
-
-  const total = queue.length;
-
-  const pct =
-    Math.round(score / total * 100);
-
-  document.getElementById('final-score').textContent =
-    `${score}/${total}`;
-
-  document.getElementById('stat-correct').textContent =
-    score;
-
-  document.getElementById('stat-wrong').textContent =
-    total - score;
-
-  document.getElementById('stat-pct').textContent =
-    pct + '%';
-
-  document.getElementById('final-sub').textContent =
-    pct === 100
-      ? 'Parfait 🎉'
-      : pct >= 80
-      ? 'Excellent 🌟'
-      : pct >= 60
-      ? 'Bien joué'
-      : 'Continue à pratiquer';
+  document.getElementById('card-content').style.display='none';
+  document.getElementById('score-screen').style.display='block';
+  const total=queue.length;
+  const pct=Math.round(score/total*100);
+  document.getElementById('final-score').textContent=`${score}/${total}`;
+  document.getElementById('stat-correct').textContent=score;
+  document.getElementById('stat-wrong').textContent=total-score;
+  document.getElementById('stat-pct').textContent=pct+'%';
+  document.getElementById('final-sub').textContent=
+    pct===100?'Parfait 🎉':pct>=80?'Excellent 🌟':pct>=60?'Bien joué':'Continue à pratiquer';
 }
-
+ 
 function restartSameQuiz(){
-
-  currentIndex = 0;
-
-  score = 0;
-
-  queue = shuffle(queue);
-
-  document.getElementById('card-content').style.display =
-    'block';
-
-  document.getElementById('score-screen').style.display =
-    'none';
-
-  document.getElementById('submit-btn').textContent =
-    'Valider →';
-
-  loadQuestion();
-
-  updateProgress();
+  currentIndex=0; score=0;
+  queue=shuffle(queue);
+  document.getElementById('card-content').style.display='block';
+  document.getElementById('score-screen').style.display='none';
+  document.getElementById('submit-btn').textContent='Valider →';
+  loadQuestion(); updateProgress();
 }
-
+ 
 function goToMenu(){
-
-  showScreen('screen-select');
+  if(quizType==='vowels') switchMode('vowels');
+  else switchMode('consonants');
 }
-
+ 
 function showScreen(id){
-
-  document.querySelectorAll('.screen')
-    .forEach(s=>s.classList.remove('active'));
-
-  document.getElementById(id)
-    .classList.add('active');
-
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
   window.scrollTo(0,0);
 }
-
+ 
+/* ══════════════════════════════════════
+   KEYBOARD
+═══════════════════════════════════════ */
 document.addEventListener('keydown',(e)=>{
-
-  if(
-    !document.getElementById('screen-quiz')
-      .classList.contains('active')
-  ) return;
-
-  if(e.key === 'Enter'){
-
-    if(answered){
-      nextQuestion();
-    }
-    else{
-      submitAnswer();
-    }
+  if(!document.getElementById('screen-quiz').classList.contains('active')) return;
+  if(e.key==='Enter'){
+    if(answered) nextQuestion(); else submitAnswer();
   }
-
-  if(!quizClassFilter){
-
-    if(e.key === '1'){
-      selectClass('haute');
-    }
-
-    if(e.key === '2'){
-      selectClass('moyenne');
-    }
-
-    if(e.key === '3'){
-      selectClass('basse');
-    }
+  if(quizType==='consonants' && !quizClassFilter){
+    if(e.key==='1') selectClass('haute');
+    if(e.key==='2') selectClass('moyenne');
+    if(e.key==='3') selectClass('basse');
+  }
+  if(quizType==='vowels' && !quizLengthFilter){
+    if(e.key==='1') selectLength('short');
+    if(e.key==='2') selectLength('long');
+    if(e.key==='3') selectLength('special');
   }
 });
-
-initGrid();
-
-updateStartBar();
+ 
+/* ══════════════════════════════════════
+   INIT
+═══════════════════════════════════════ */
+initConsonantGrid();
+initVowelGrid();
+updateConsonantStartBar();
+updateVowelStartBar();
 </script>
-
+ 
 </body>
 </html>
+ 
